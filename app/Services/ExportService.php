@@ -3,7 +3,10 @@
 namespace App\Services;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Enumerable;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -137,7 +140,7 @@ class GenericExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoS
         $this->headings = $options['headings'] ?? [];
     }
 
-    public function query()
+    public function query(): QueryBuilder|Builder|Relation
     {
         return $this->query;
     }
@@ -155,7 +158,7 @@ class GenericExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoS
         return $headings;
     }
 
-    public function map($row): array
+    public function map(mixed $row): array
     {
         $data = [];
         foreach ($this->fields as $field) {
@@ -201,7 +204,7 @@ class GenericExport implements FromQuery, WithHeadings, WithMapping, ShouldAutoS
         return null;
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): ?array
     {
         return [
             1 => ['font' => ['bold' => true]],
@@ -227,7 +230,7 @@ class GenericCollectionExport implements FromCollection, WithHeadings, WithMappi
         $this->headings = $options['headings'] ?? [];
     }
 
-    public function collection()
+    public function collection(): Enumerable
     {
         return $this->collection;
     }
@@ -245,7 +248,7 @@ class GenericCollectionExport implements FromCollection, WithHeadings, WithMappi
         return $headings;
     }
 
-    public function map($row): array
+    public function map(mixed $row): array
     {
         $data = [];
         foreach ($this->fields as $field) {
@@ -290,7 +293,7 @@ class GenericCollectionExport implements FromCollection, WithHeadings, WithMappi
         return null;
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): ?array
     {
         return [
             1 => ['font' => ['bold' => true]],
